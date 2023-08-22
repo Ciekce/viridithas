@@ -918,6 +918,8 @@ impl Board {
             info.nodes.increment();
             moves_made += 1;
 
+            let gives_check = self.in_check();
+
             let maybe_singular = depth >= info.search_params.singularity_depth
                 && excluded.is_null()
                 && matches!(tt_hit, Some(TTHit { tt_move, tt_depth, tt_bound: Bound::Lower | Bound::Exact, .. }) if tt_move == m && tt_depth >= depth - 3);
@@ -982,6 +984,7 @@ impl Board {
                             r += 1;
                         }
                     }
+                    r -= i32::from(gives_check);
                     Depth::new(r).clamp(ONE_PLY, depth - 1)
                 } else {
                     ONE_PLY

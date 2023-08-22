@@ -21,7 +21,7 @@ use crate::{
     errors::{FenParseError, MoveParseError},
     lookups::{PIECE_BIG, PIECE_MAJ},
     makemove::{hash_castling, hash_ep, hash_piece, hash_side},
-    nnue::network::{Activate, Deactivate, Update, self},
+    nnue::network::{self, Activate, Deactivate, Update},
     piece::{Colour, Piece, PieceType},
     piecesquaretable::pst_value,
     search::pv::PVariation,
