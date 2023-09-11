@@ -66,7 +66,12 @@ impl ThreadData {
                 "Invalid piece moved by move {m} in position \n{pos}"
             );
             let to = m.to();
-            let val = self.tactical_history.get_mut(piece_moved, to, capture);
+            let val = self.tactical_history.get_mut(
+                piece_moved,
+                to,
+                capture,
+                pos.threats.contains_square(to),
+            );
             update_history(val, depth, m == best_move);
         }
     }
@@ -77,7 +82,12 @@ impl ThreadData {
             let piece_moved = pos.moved_piece(m.mov);
             let capture = caphist_piece_type(pos, m.mov);
             let to = m.mov.to();
-            m.score += i32::from(self.tactical_history.get(piece_moved, to, capture));
+            m.score += i32::from(self.tactical_history.get(
+                piece_moved,
+                to,
+                capture,
+                pos.threats.contains_square(to),
+            ));
         }
     }
 

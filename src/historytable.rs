@@ -96,7 +96,7 @@ impl ThreatsHistoryTable {
 
 #[derive(Clone)]
 pub struct CaptureHistoryTable {
-    table: [HistoryTable; 6],
+    table: [[HistoryTable; 2]; 6],
 }
 
 impl CaptureHistoryTable {
@@ -116,20 +116,26 @@ impl CaptureHistoryTable {
     }
 
     pub fn clear(&mut self) {
-        self.table.iter_mut().for_each(HistoryTable::clear);
+        self.table.iter_mut().flatten().for_each(HistoryTable::clear);
     }
 
     pub fn age_entries(&mut self) {
         assert!(!self.table.is_empty());
-        self.table.iter_mut().for_each(HistoryTable::age_entries);
+        self.table.iter_mut().flatten().for_each(HistoryTable::age_entries);
     }
 
-    pub const fn get(&self, piece: Piece, sq: Square, capture: PieceType) -> i16 {
-        self.table[capture.index()].get(piece, sq)
+    pub fn get(&self, piece: Piece, sq: Square, capture: PieceType, defended: bool) -> i16 {
+        self.table[capture.index()][usize::from(defended)].get(piece, sq)
     }
 
-    pub fn get_mut(&mut self, piece: Piece, sq: Square, capture: PieceType) -> &mut i16 {
-        self.table[capture.index()].get_mut(piece, sq)
+    pub fn get_mut(
+        &mut self,
+        piece: Piece,
+        sq: Square,
+        capture: PieceType,
+        defended: bool,
+    ) -> &mut i16 {
+        self.table[capture.index()][usize::from(defended)].get_mut(piece, sq)
     }
 }
 
